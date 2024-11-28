@@ -1,0 +1,89 @@
+let startBtn = document.getElementById('start');
+let stopBtn = document.getElementById('stop');
+let resetBtn = document.getElementById('reset');
+let lapBtn = document.getElementById('lap');
+let resetLapBtn = document.getElementById('reset-lap');
+let lapList = document.getElementById('lap-list');
+
+let hour = 0;
+let minute = 0;
+let second = 0;
+let count = 0;
+let timer = false;
+
+// Start Stopwatch
+startBtn.addEventListener('click', function () {
+    timer = true;
+    stopWatch();
+});
+
+// Stop Stopwatch
+stopBtn.addEventListener('click', function () {
+    timer = false;
+});
+
+// Reset Stopwatch
+resetBtn.addEventListener('click', function () {
+    timer = false;
+    hour = 0;
+    minute = 0;
+    second = 0;
+    count = 0;
+    document.getElementById('hr').innerHTML = "00";
+    document.getElementById('min').innerHTML = "00";
+    document.getElementById('sec').innerHTML = "00";
+    document.getElementById('count').innerHTML = "00";
+});
+
+// Lap Functionality
+lapBtn.addEventListener('click', function () {
+    const hrString = hour < 10 ? "0" + hour : hour;
+    const minString = minute < 10 ? "0" + minute : minute;
+    const secString = second < 10 ? "0" + second : second;
+    const countString = count < 10 ? "0" + count : count;
+
+    const lapTime = `${hrString}:${minString}:${secString}:${countString}`;
+    const li = document.createElement('li');
+    li.textContent = lapTime;
+    lapList.appendChild(li);
+});
+
+// Reset Lap
+resetLapBtn.addEventListener('click', function () {
+    lapList.innerHTML = ""; // Clear all lap records
+});
+
+// Stopwatch Logic
+function stopWatch() {
+    if (timer) {
+        count++;
+
+        if (count == 100) {
+            second++;
+            count = 0;
+        }
+
+        if (second == 60) {
+            minute++;
+            second = 0;
+        }
+
+        if (minute == 60) {
+            hour++;
+            minute = 0;
+            second = 0;
+        }
+
+        let hrString = hour < 10 ? "0" + hour : hour;
+        let minString = minute < 10 ? "0" + minute : minute;
+        let secString = second < 10 ? "0" + second : second;
+        let countString = count < 10 ? "0" + count : count;
+
+        document.getElementById('hr').innerHTML = hrString;
+        document.getElementById('min').innerHTML = minString;
+        document.getElementById('sec').innerHTML = secString;
+        document.getElementById('count').innerHTML = countString;
+
+        setTimeout(stopWatch, 10); // Call function every 10ms
+    }
+}
